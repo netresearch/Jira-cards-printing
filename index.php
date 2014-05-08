@@ -36,8 +36,7 @@ if(!empty($_POST['xml_url'])) {
     if ($format === '1PerPageWithSubtasks') {
         $domXML = populateSubtasks($docXML, $username, $password);
     } else {
-        $domXML = new DomDocument();
-        $domXML->load($docXML);
+        $domXML = loadParentTitles($docXML, $username, $password);
     }
 
     $domXSL = new DomDocument();
@@ -97,6 +96,38 @@ else { ?>
         <p class="credits">Brought to you by Sébastien Roch. Feedback welcome!</p>
     </body>
 </html><?php
+}
+
+
+function loadParentTitles($docXML, $username, $password)
+{
+    $sx = simplexml_load_file($docXML);
+
+    $xparents = $sx->xpath('//channel/item/parent');
+    $parentKeys = array();
+    foreach ($xparents as $xItem) {
+        $parentKeys[(string)$xItem] = true;
+    }
+    $query = 'key IN (' . implode(', ', array_keys($parentKeys)) . ')';
+
+    $urlParts = parse_url($docXML);
+    $purl = $urlParts['scheme'].'://'.$urlParts['host'].$urlParts['path'];
+    $purl .= '?jqlQuery='.urlencode($query)
+        . '&field=key&field=summary'
+        . "&os_username=$username&os_password=$password" // credentials
+        . '&tempMax=100&reset=true'; // put some limit in case of...
+
+    $sxp = simplexml_load_file($purl);
+    foreach ($sxp->xpath('/rss/channel/item') as $xItem) {
+        $pKey   = (string) $xItem->key;
+        $pTitle = (string) $xItem->summary;
+
+        foreach ($sx->xpath('//item[string(parent)="' . $pKey . '"]') as $sItem) {
+            $sItem->parentsummary = $pTitle;
+        }
+    }
+
+    return dom_import_simplexml($sx);
 }
 
 /**

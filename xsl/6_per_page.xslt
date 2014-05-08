@@ -57,6 +57,14 @@
                     Priority: <img src="{$data/priority/@iconUrl}" style="position: relative; top: 3px"/> <span class="priority"><xsl:value-of select="$data/priority" /></span>
                 </td>
             </tr>
+            <xsl:if test="$data/parent">
+              <tr class="parentsummary">
+                <td colspan="2">
+                  <xsl:value-of select="$data/parent" />:
+                  <xsl:value-of select="$data/parentsummary" />
+                </td>
+              </tr>
+            </xsl:if>
             <tr class="summary">
                 <td colspan="2"><xsl:value-of select="$data/summary" /></td>
             </tr>
