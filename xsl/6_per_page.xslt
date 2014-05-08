@@ -48,13 +48,11 @@
             <tr>
                 <td>
                     <h1><xsl:value-of select="$data/key" /></h1>
-                    <xsl:if test="$data/parent">
-                        Subtask of <strong><xsl:value-of select="$data/parent" /></strong>
-                    </xsl:if>
                 </td>
                 <td class="meta">
-                    Version: <span class="version"><xsl:value-of select="$data/fixVersion" /></span><br />
-                    Priority: <img src="{$data/priority/@iconUrl}" style="position: relative; top: 3px"/> <span class="priority"><xsl:value-of select="$data/priority" /></span>
+                  <xsl:if test="$data/component">
+                    <xsl:value-of select="$data/component" />
+                  </xsl:if>
                 </td>
             </tr>
             <xsl:if test="$data/parent">
@@ -69,24 +67,19 @@
                 <td colspan="2"><xsl:value-of select="$data/summary" /></td>
             </tr>
             <xsl:if test="$data/timeestimate or $data/customfields/customfield[@id='customfield_10040']/customfieldvalues[1]/customfieldvalue">
-                <tr class="estimation">
-                    <td colspan="2">Estimation:
-                        <span class="estimation">
-                            <xsl:choose>
-                                <xsl:when test="$data/timeestimate">
-                                    <xsl:value-of select="$data/timeestimate" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$data/customfields/customfield[@id='customfield_10040']/customfieldvalues[1]/customfieldvalue" /> SP
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </span>
-                    </td>
-                </tr>
+              <tr class="estimation">
+                <td colspan="2">
+                <xsl:choose>
+                  <xsl:when test="$data/timeestimate">
+                    <xsl:value-of select="$data/timeestimate" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$data/customfields/customfield[@id='customfield_10040']/customfieldvalues[1]/customfieldvalue" /> SP
+                  </xsl:otherwise>
+                </xsl:choose>
+                </td>
+              </tr>
             </xsl:if>
-            <tr class="description">
-                <td colspan="2"><xsl:value-of select="$data/description" disable-output-escaping="yes"/></td>
-            </tr>
         </table>
 
     </xsl:template>
