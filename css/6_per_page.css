@@ -12,7 +12,8 @@ table {
 table.all > tbody > tr > td {
 	vertical-align: top;
 	border: 1pt solid #EFEFEF;
-	width: 46%;
+	width: 31%;
+	max-width: 31%;
 	padding: 2%;
 }
 
@@ -33,7 +34,8 @@ table.card tr.description td, table.card tr.estimation td {
 }
 
 table.card tr td.meta {
-	width: 60%;
+        text-align: right;
+        vertical-align: top !important;
 }
 
 table.card tr td.meta span.priority,
@@ -47,7 +49,7 @@ table.card tr:first-child td {
 
 table.card h1 {
 	margin: 0;
-	font-size: 20pt;
+	font-size: 22pt;
 }
 
 table.card tr.estimation td span.estimation {

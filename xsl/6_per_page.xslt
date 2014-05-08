@@ -14,11 +14,11 @@
         </head>
         <body>
             <table class="all">
-                <xsl:for-each select="rss/channel/item">
-                    <xsl:if test="position() mod 2 = 1">
+                <xsl:for-each select="rss/channel/item[string(summary)!='QA' and ./parent]">
+                    <xsl:if test="position() mod 3 = 1">
                         <xsl:variable name="tr_open">
-                            <xsl:if test="position() mod 6 = 1 and position() != 1">&lt;tr class=&quot;page-break&quot;&gt;</xsl:if>
-                            <xsl:if test="position() mod 6 != 1">&lt;tr&gt;</xsl:if>
+                            <xsl:if test="position() mod 9 = 1 and position() != 1">&lt;tr class=&quot;page-break&quot;&gt;</xsl:if>
+                            <xsl:if test="position() mod 9 != 1">&lt;tr&gt;</xsl:if>
                         </xsl:variable>
                         <xsl:value-of select="$tr_open" disable-output-escaping="yes"/>
                     </xsl:if>
@@ -31,7 +31,7 @@
                         </div>
                     </td>
 
-                    <xsl:if test="position() mod 2 = 0">
+                    <xsl:if test="position() mod 3 = 0">
                         <xsl:variable name="tr_close">&lt;/tr&gt;</xsl:variable>
                         <xsl:value-of select="$tr_close" disable-output-escaping="yes"/>
                     </xsl:if>
