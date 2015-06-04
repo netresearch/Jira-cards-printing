@@ -14,7 +14,7 @@
         </head>
         <body>
             <table class="all">
-                <xsl:for-each select="rss/channel/item[string(summary)!='QA']">
+                <xsl:for-each select="rss/channel/item[string(summary)!='QA' and ./parent]">
                     <xsl:if test="position() mod 3 = 1">
                         <xsl:variable name="tr_open">
                             <xsl:if test="position() mod 9 = 1 and position() != 1">&lt;tr class=&quot;page-break&quot;&gt;</xsl:if>
@@ -55,27 +55,27 @@
                   </xsl:if>
                 </td>
             </tr>
-            <xsl:if test="$data/customfields/customfield[@key='com.pyxis.greenhopper.jira:gh-epic-link']/customfieldvalues/customfieldvalue">
+            <xsl:if test="$data/parent">
               <tr class="parentsummary">
                 <td colspan="2">
-                  <xsl:value-of select="$data/customfields/customfield[@key='com.pyxis.greenhopper.jira:gh-epic-link']/customfieldvalues/customfieldvalue" />:
-                  <xsl:value-of select="//item[key=$data/customfields/customfield[@key='com.pyxis.greenhopper.jira:gh-epic-link']/customfieldvalues/customfieldvalue]/summary" />
+                  <xsl:value-of select="$data/parent" />:
+                  <xsl:value-of select="$data/parentsummary" />
                 </td>
               </tr>
             </xsl:if>
             <tr class="summary">
                 <td colspan="2"><xsl:value-of select="$data/summary" /></td>
             </tr>
-            <xsl:if test="$data/timeestimate or $data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue">
+            <xsl:if test="$data/timeestimate or $data/customfields/customfield[@id='customfield_10040']/customfieldvalues[1]/customfieldvalue">
               <tr class="estimation">
                 <td colspan="2">
                 <xsl:choose>
-                  <xsl:when test="$data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue">
-                    <xsl:value-of select="$data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue" /> Story Points
-                  </xsl:when>
                   <xsl:when test="$data/timeestimate">
                     <xsl:value-of select="$data/timeestimate" />
                   </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$data/customfields/customfield[@id='customfield_10040']/customfieldvalues[1]/customfieldvalue" /> SP
+                  </xsl:otherwise>
                 </xsl:choose>
                 </td>
               </tr>
