@@ -3,13 +3,12 @@
 define( 'CREDENTIALS_EXPIRE_OFFSET', 2592000 ); // 1 month
 
 if(!empty($_POST['xml_url'])) {
-
     $docXML = $_POST['xml_url'];
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     // add credentials to url
-    $docXML = $docXML . "&os_username=$username&os_password=$password";
+    $docXML = $docXML . "&os_username=" . urlencode($username) . "&os_password=" . urlencode($password);
     $format = $_POST['format'];
     $remember = @$_POST['remember'];
     if ($remember === 'on') {
@@ -102,6 +101,7 @@ else { ?>
 function loadParentTitles($docXML, $username, $password)
 {
     $sx = simplexml_load_file($docXML);
+    //    var_dump($docXML, $sx);die();
 
     $xparents = $sx->xpath('//channel/item/parent');
     $parentKeys = array();
@@ -144,7 +144,6 @@ function loadParentTitles($docXML, $username, $password)
 function populateSubtasks($docXML, $username, $password)
 {
     $urlParts = parse_url($docXML);
-
     // get the jira query
     $jiraQuery= urldecode(parse_url($docXML, PHP_URL_QUERY));
     parse_str($jiraQuery, $parts);
