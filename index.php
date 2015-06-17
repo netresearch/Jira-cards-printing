@@ -9,6 +9,7 @@ if(!empty($_POST['xml_url'])) {
 
     // add credentials to url
     $docXML = $docXML . "&os_username=" . urlencode($username) . "&os_password=" . urlencode($password);
+
     $format = $_POST['format'];
     $remember = @$_POST['remember'];
     if ($remember === 'on') {
@@ -101,13 +102,15 @@ else { ?>
 function loadParentTitles($docXML, $username, $password)
 {
     $sx = simplexml_load_file($docXML);
-    //    var_dump($docXML, $sx);die();
+    //   var_dump($docXML, $sx);die();
 
-    $xparents = $sx->xpath('//channel/item/parent');
+    //$xparents = $sx->xpath('//channel/item/parent');
+    $xparents = $sx->xpath('//channel/item/customfields/customfield[@key="com.pyxis.greenhopper.jira:gh-epic-link"]/customfieldvalues/customfieldvalue');
     $parentKeys = array();
     foreach ($xparents as $xItem) {
         $parentKeys[(string)$xItem] = true;
     }
+    //FIXME: check if empty and skip
     $query = 'key IN (' . implode(', ', array_keys($parentKeys)) . ')';
 
     $urlParts = parse_url($docXML);
@@ -116,13 +119,13 @@ function loadParentTitles($docXML, $username, $password)
         . '&field=key&field=summary'
         . "&os_username=$username&os_password=$password" // credentials
         . '&tempMax=100&reset=true'; // put some limit in case of...
-
+    //var_dump($purl);die();
     $sxp = simplexml_load_file($purl);
     foreach ($sxp->xpath('/rss/channel/item') as $xItem) {
         $pKey   = (string) $xItem->key;
         $pTitle = (string) $xItem->summary;
 
-        foreach ($sx->xpath('//item[string(parent)="' . $pKey . '"]') as $sItem) {
+        foreach ($sx->xpath('//item[string(customfields/customfield[@key="com.pyxis.greenhopper.jira:gh-epic-link"]/customfieldvalues/customfieldvalue)="' . $pKey . '"]') as $sItem) {
             $sItem->parentsummary = $pTitle;
         }
     }

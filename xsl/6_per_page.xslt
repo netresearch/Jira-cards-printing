@@ -59,7 +59,8 @@
               <tr class="parentsummary">
                 <td colspan="2">
                   <xsl:value-of select="$data/customfields/customfield[@key='com.pyxis.greenhopper.jira:gh-epic-link']/customfieldvalues/customfieldvalue" />:
-                  <xsl:value-of select="//item[key=$data/customfields/customfield[@key='com.pyxis.greenhopper.jira:gh-epic-link']/customfieldvalues/customfieldvalue]/summary" />
+                  <!--<xsl:value-of select="//item[key=$data/customfields/customfield[@key='com.pyxis.greenhopper.jira:gh-epic-link']/customfieldvalues/customfieldvalue]/summary" />-->
+                  <xsl:value-of select="$data/parentsummary" />
                 </td>
               </tr>
             </xsl:if>
