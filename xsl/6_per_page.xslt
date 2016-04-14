@@ -67,17 +67,17 @@
             <tr class="summary">
                 <td colspan="2"><xsl:value-of select="$data/summary" /></td>
             </tr>
-            <xsl:if test="$data/timeestimate or $data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue">
+            <xsl:if test="$data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue">
               <tr class="estimation">
                 <td colspan="2">
-                <xsl:choose>
-                  <xsl:when test="$data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue">
-                    <xsl:value-of select="$data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue" /> Story Points
-                  </xsl:when>
-                  <xsl:when test="$data/timeestimate">
-                    <xsl:value-of select="$data/timeestimate" />
-                  </xsl:when>
-                </xsl:choose>
+                  <xsl:value-of select="$data/customfields/customfield[@id='customfield_10033']/customfieldvalues[1]/customfieldvalue" /> Story Points
+                </td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="$data/timeoriginalestimate">
+              <tr class="estimation">
+                <td colspan="2">
+                  <xsl:value-of select="$data/timeoriginalestimate" /> estimated
                 </td>
               </tr>
             </xsl:if>
