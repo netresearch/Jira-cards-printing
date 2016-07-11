@@ -78,7 +78,7 @@ else { ?>
                 <label>format:</label>
                 <div>
                     <input id="6PerPage" type="radio" name="format" value="6PerPage" checked />
-                    <label class="inline" for="6PerPage">6 cards per page</label>
+                    <label class="inline" for="6PerPage">9 cards per page</label>
                     <br />
                     <input id="1PerPage" type="radio" name="format" value="1PerPage"/>
                     <label class="inline" for="1PerPage">1 card per page</label>
@@ -110,16 +110,22 @@ function loadParentTitles($docXML, $username, $password)
     foreach ($xparents as $xItem) {
         $parentKeys[(string)$xItem] = true;
     }
-    //FIXME: check if empty and skip
-    $query = 'key IN (' . implode(', ', array_keys($parentKeys)) . ')';
+    
+    if(empty($parentKeys)){
+        // if no parentkeys exist, don't query for them
+        $query = null;
+    } else {
+        $query = 'key IN (' . implode(', ', array_keys($parentKeys)) . ')';
+    }
+
 
     $urlParts = parse_url($docXML);
     $purl = $urlParts['scheme'].'://'.$urlParts['host'].$urlParts['path'];
-    $purl .= '?jqlQuery='.urlencode($query)
-        . '&field=key&field=summary'
+    $purl .= '?jqlQuery='. $query ? urlencode($query).'&' : '' // query if parent keys (epic links) exist for the tickets
+        . 'field=key&field=summary'
         . "&os_username=$username&os_password=$password" // credentials
         . '&tempMax=100&reset=true'; // put some limit in case of...
-    //var_dump($purl);die();
+
     $sxp = simplexml_load_file($purl);
     foreach ($sxp->xpath('/rss/channel/item') as $xItem) {
         $pKey   = (string) $xItem->key;
